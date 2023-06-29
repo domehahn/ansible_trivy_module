@@ -137,7 +137,7 @@ def run_module():
     if module.params['type'] == 'image' and module.params['image'] == '':
         module.fail_json(msg='If you want to scan an image, you have to put in an image name.', **result)
 
-    if module.params['type'] == 'config' and module.params['path'] == '':
+    if module.params['type'] == 'dir' and module.params['path'] == '':
         module.fail_json(msg='If you want to scan a directory, you have to enter a path.', **result)
 
     # manipulate or modify the state as needed (this is going to be the
@@ -145,7 +145,7 @@ def run_module():
     if module.params['type'] == 'image':
         scan_image(module)
 
-    if module.params['type'] == 'config':
+    if module.params['type'] == 'dir':
         scan_directory(module)
 
     result['message'] = 'Successfully writen to ' + module.params['dest']

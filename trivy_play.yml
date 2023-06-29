@@ -1,31 +1,38 @@
-- name: Test the trivy Modul
-  hosts: localhost
-    
+- hosts: all
+  gather_facts: true
+  
   tasks:
 
-  - name: Run trivy normal
-    ansible_module_trivy:
-      type: 'image'
-      image: 'microservice'
-      dest: 'trivy_normal.log'
+    - name: Check if trivy is installed
+      
 
-  - name: Run trivy with severity
-    ansible_module_trivy:
-      type: 'image'
-      image: 'microservice'
-      severities: 
-        - HIGH
-      dest: 'trivy_severity.log'
+    - name: Run trivy normal
+      ansible_module_trivy:
+        type: 'image'
+        image: 'antrag-service'
+        dest: 'trivy_normal.log'
+      register: output
+    
+    - debug:
+          var: output
 
-  - name: Run trivy with ignored unfixed
-    ansible_module_trivy:
-      type: 'image'
-      image: 'microservice'
-      unfixed: true
-      dest: 'trivy_ignore_unfixed.log'
+    - name: Run trivy with severity
+      ansible_module_trivy:
+        type: 'image'
+        image: 'antrag-service'
+        severities: 
+          - HIGH
+        dest: 'trivy_severity.log'
 
-  - name: Run trivy config
-    ansible_module_trivy:
-      type: 'config'
-      path: './build'
-      dest: 'trivy_config.log'
+    - name: Run trivy with ignored unfixed
+      ansible_module_trivy:
+        type: 'image'
+        image: 'antrag-service'
+        unfixed: true
+        dest: 'trivy_ignore_unfixed.log'
+
+    - name: Run trivy config
+      ansible_module_trivy:
+        type: 'dir'
+        path: './build'
+        dest: 'trivy_config.log'
